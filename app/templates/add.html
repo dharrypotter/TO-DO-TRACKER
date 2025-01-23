@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mt-4">Add a New TODO</h1>
+<form method="POST" action="{{ url_for('add') }}">
+    <div class="mb-3">
+        <label for="title" class="form-label">TODO Title</label>
+        <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            required
+        >
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+    <!-- Optional Cancel link to return to the main list -->
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

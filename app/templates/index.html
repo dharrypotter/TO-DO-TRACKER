@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mt-4">My TODO List</h1>
+
+<!-- Search Form -->
+<form method="GET" action="{{ url_for('index') }}" class="mb-4">
+    <div class="input-group">
+        <input
+            type="text"
+            class="form-control"
+            name="search_query"
+            placeholder="Search TODOs"
+            value="{{ request.args.get('search_query', '') }}"
+        >
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+</form>
+
+<!-- Add Button -->
+<a href="{{ url_for('add') }}" class="btn btn-primary mb-3">
+    Add TODO
+</a>
+
+<!-- Display TODO List -->
+<ul class="list-group">
+    {% for todo in todos %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            {{ todo.title }}
+        </div>
+        <div>
+            <!-- Move Up -->
+            <form
+              method="POST"
+              action="{{ url_for('resort', id=todo.id, direction='up') }}"
+              style="display:inline;"
+            >
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  type="submit"
+                  title="Move Up"
+                >
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </form>
+
+            <!-- Move Down -->
+            <form
+              method="POST"
+              action="{{ url_for('resort', id=todo.id, direction='down') }}"
+              style="display:inline;"
+            >
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  type="submit"
+                  title="Move Down"
+                >
+                    <i class="fas fa-arrow-down"></i>
+                </button>
+            </form>
+
+            <!-- Delete -->
+            <a
+              href="{{ url_for('delete', id=todo.id) }}"
+              class="btn btn-danger btn-sm"
+              title="Delete"
+            >
+                <i class="fas fa-trash-alt"></i>
+            </a>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
