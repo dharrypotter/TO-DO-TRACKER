@@ -1,5 +1,5 @@
 TODO Tracker App
-Welcome to the TODO Tracker App, your ultimate tool for organizing and managing your tasks! We're excited to announce that our app is launching tomorrow, and it's going to change the way you handle your to-do lists forever. 🚀
+Welcome to the TODO Tracker App, your ultimate tool for organizing and managing your tasks! I hope it's going to change the way you handle your to-do lists forever. 🚀
 
 🎉 We're Ready to Go!
 Our team has worked tirelessly to bring you a sleek and functional task tracker. The app is fully operational, and we're almost ready to go live. That said, there are still a few minor tweaks to make before launch, and we'd love your help to polish it up.
