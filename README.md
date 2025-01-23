@@ -1,9 +1,6 @@
 TODO Tracker App
 Welcome to the TODO Tracker App, your ultimate tool for organizing and managing your tasks! I hope it's going to change the way you handle your to-do lists forever. 🚀
 
-🎉 We're Ready to Go!
-Our team has worked tirelessly to bring you a sleek and functional task tracker. The app is fully operational, and we're almost ready to go live. That said, there are still a few minor tweaks to make before launch, and we'd love your help to polish it up.
-
 📝 Current Features
 1. Add New TODO Items: Quickly add new tasks to your list and keep track of what needs to be done.
 List TODO Items: View all your added tasks in a neat list format, complete with Bootstrap styling.
