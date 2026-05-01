@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Edit task — TaskFlow{% endblock %}
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width: 600px;">
+    <h2 class="mb-3"><i class="fa-solid fa-pen"></i> Edit task</h2>
+    <form method="POST" action="{{ url_for('edit', id=todo.id) }}">
+        <div class="mb-3">
+            <label class="form-label">Title <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="title" required
+                   value="{{ todo.title }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3">{{ todo.description or '' }}</textarea>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Priority</label>
+                <select class="form-select" name="priority">
+                    <option value="3" {% if todo.priority == 3 %}selected{% endif %}>High</option>
+                    <option value="2" {% if todo.priority == 2 %}selected{% endif %}>Medium</option>
+                    <option value="1" {% if todo.priority == 1 %}selected{% endif %}>Low</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Due date</label>
+                <input type="date" class="form-control" name="due_date"
+                       value="{{ todo.due_date or '' }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Category</label>
+                <select class="form-select" name="category_id">
+                    <option value="">— None —</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}"
+                            {% if todo.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button class="btn btn-primary" type="submit">
+                <i class="fa-solid fa-floppy-disk"></i> Save changes
+            </button>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

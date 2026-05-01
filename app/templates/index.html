@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block title %}My tasks — TaskFlow{% endblock %}
+{% block content %}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+    <div>
+        <h1 class="mb-0">My Tasks</h1>
+        <p class="text-secondary small mb-0">{{ todos|length }} task{{ '' if todos|length == 1 else 's' }} shown</p>
+    </div>
+    <a href="{{ url_for('add') }}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> New task
+    </a>
+</div>
+
+<!-- Filters -->
+<form method="GET" action="{{ url_for('index') }}" class="card p-3 mb-3">
+    <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label small text-secondary mb-1">Search</label>
+            <input
+                type="text"
+                class="form-control"
+                name="search_query"
+                placeholder="Search tasks…"
+                value="{{ search_query }}"
+            >
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small text-secondary mb-1">Status</label>
+            <select name="status" class="form-select">
+                <option value="active"    {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+                <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+                <option value="all"       {% if status_filter == 'all' %}selected{% endif %}>All</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small text-secondary mb-1">Priority</label>
+            <select name="priority" class="form-select">
+                <option value="">Any</option>
+                <option value="3" {% if priority_filter == '3' %}selected{% endif %}>High</option>
+                <option value="2" {% if priority_filter == '2' %}selected{% endif %}>Medium</option>
+                <option value="1" {% if priority_filter == '1' %}selected{% endif %}>Low</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label small text-secondary mb-1">Category</label>
+            <select name="category" class="form-select">
+                <option value="">All categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}"
+                        {% if category_filter == cat.id|string %}selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-1 d-grid">
+            <button class="btn btn-outline-primary" type="submit">
+                <i class="fa-solid fa-filter"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- Task List -->
+{% if todos %}
+    <div class="task-list">
+        {% for todo in todos %}
+            {% set is_overdue = (not todo.completed) and todo.due_date and todo.due_date < today.isoformat() %}
+            <div class="todo-item {% if todo.completed %}completed{% endif %} {% if is_overdue %}overdue{% endif %}">
+
+                <form method="POST" action="{{ url_for('complete', id=todo.id) }}" class="m-0">
+                    <input type="checkbox"
+                           class="tf-checkbox"
+                           {% if todo.completed %}checked{% endif %}
+                           onchange="this.form.submit()"
+                           title="{{ 'Mark as active' if todo.completed else 'Mark as complete' }}">
+                </form>
+
+                <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="priority-dot p{{ todo.priority }}"
+                              title="{{ priority_labels[todo.priority] }} priority"></span>
+                        <span class="todo-title">{{ todo.title }}</span>
+                    </div>
+                    {% if todo.description %}
+                        <div class="todo-desc">{{ todo.description }}</div>
+                    {% endif %}
+                    <div class="todo-meta">
+                        {% if todo.category_name %}
+                            <span class="cat-chip" style="background: {{ todo.category_color }}">
+                                <i class="fa-solid fa-tag"></i> {{ todo.category_name }}
+                            </span>
+                        {% endif %}
+                        {% if todo.due_date %}
+                            <span class="meta-pill {% if is_overdue %}overdue{% endif %}">
+                                <i class="fa-regular fa-calendar"></i>
+                                {{ todo.due_date }}
+                                {% if is_overdue %} — overdue{% endif %}
+                            </span>
+                        {% endif %}
+                        <span class="meta-pill">
+                            <i class="fa-solid fa-flag"></i>
+                            {{ priority_labels[todo.priority] }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="todo-actions d-flex gap-1">
+                    <form method="POST" action="{{ url_for('resort', id=todo.id, direction='up') }}" class="m-0">
+                        <button class="btn btn-outline-secondary btn-sm" title="Move up"><i class="fa-solid fa-arrow-up"></i></button>
+                    </form>
+                    <form method="POST" action="{{ url_for('resort', id=todo.id, direction='down') }}" class="m-0">
+                        <button class="btn btn-outline-secondary btn-sm" title="Move down"><i class="fa-solid fa-arrow-down"></i></button>
+                    </form>
+                    <a href="{{ url_for('edit', id=todo.id) }}" class="btn btn-outline-primary btn-sm" title="Edit">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+                    <form method="POST" action="{{ url_for('delete', id=todo.id) }}" class="m-0"
+                          onsubmit="return confirm('Delete this task?');">
+                        <button class="btn btn-outline-danger btn-sm" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <i class="fa-solid fa-clipboard-list d-block"></i>
+        <h5>Nothing here yet</h5>
+        <p class="mb-3">{% if search_query or category_filter or priority_filter %}Try clearing your filters or {% endif %}add a task to get started.</p>
+        <a href="{{ url_for('add') }}" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Add your first task
+        </a>
+    </div>
+{% endif %}
+
+{% endblock %}

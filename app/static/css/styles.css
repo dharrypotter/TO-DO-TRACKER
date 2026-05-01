@@ -1,0 +1,210 @@
+:root {
+    --tf-radius: 14px;
+    --tf-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 6px 18px rgba(0,0,0,0.06);
+}
+
+body {
+    background: var(--bs-body-bg);
+    min-height: 100vh;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+[data-bs-theme="light"] body {
+    background:
+        radial-gradient(circle at 0% 0%, rgba(13,110,253,0.06), transparent 40%),
+        radial-gradient(circle at 100% 0%, rgba(32,201,151,0.06), transparent 40%),
+        #f6f8fc;
+}
+
+[data-bs-theme="dark"] body {
+    background:
+        radial-gradient(circle at 0% 0%, rgba(13,110,253,0.10), transparent 40%),
+        radial-gradient(circle at 100% 0%, rgba(32,201,151,0.08), transparent 40%),
+        #0f1115;
+}
+
+.tf-nav {
+    backdrop-filter: blur(8px);
+    background: color-mix(in srgb, var(--bs-body-bg) 80%, transparent);
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.card {
+    border-radius: var(--tf-radius);
+    box-shadow: var(--tf-shadow);
+    border: 1px solid var(--bs-border-color);
+}
+
+.tf-stat {
+    border-radius: var(--tf-radius);
+    padding: 1.1rem 1.25rem;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    box-shadow: var(--tf-shadow);
+    height: 100%;
+}
+
+.tf-stat .label {
+    font-size: 0.8rem;
+    color: var(--bs-secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.25rem;
+}
+
+.tf-stat .value {
+    font-size: 1.85rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    transition: transform 0.08s ease, box-shadow 0.15s ease;
+}
+
+.todo-item:hover {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.todo-item.completed .todo-title {
+    text-decoration: line-through;
+    color: var(--bs-secondary-color);
+}
+
+.todo-item.overdue {
+    border-left: 4px solid var(--bs-danger);
+}
+
+.todo-title {
+    font-weight: 500;
+}
+
+.todo-desc {
+    font-size: 0.85rem;
+    color: var(--bs-secondary-color);
+    margin-top: 0.15rem;
+}
+
+.todo-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+}
+
+.todo-meta .meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: var(--bs-tertiary-bg);
+    color: var(--bs-secondary-color);
+}
+
+.todo-meta .meta-pill.overdue {
+    background: rgba(220, 53, 69, 0.12);
+    color: var(--bs-danger);
+}
+
+.priority-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.priority-dot.p1 { background: #198754; }
+.priority-dot.p2 { background: #ffc107; }
+.priority-dot.p3 { background: #dc3545; }
+
+.cat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: white;
+}
+
+.tf-checkbox {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    cursor: pointer;
+    accent-color: var(--bs-primary);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--bs-secondary-color);
+}
+.empty-state .fa-clipboard-list {
+    font-size: 3rem;
+    opacity: 0.4;
+    margin-bottom: 0.75rem;
+}
+
+.auth-card {
+    max-width: 420px;
+    margin: 4rem auto 0;
+}
+
+.brand-hero {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.brand-hero .fa-bolt-lightning {
+    color: #ffc107;
+    font-size: 2.25rem;
+}
+
+.streak-badge {
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    color: white;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.activity-bar {
+    flex: 1;
+    background: var(--bs-tertiary-bg);
+    border-radius: 4px;
+    position: relative;
+    height: 100px;
+    display: flex;
+    align-items: flex-end;
+}
+.activity-bar .fill {
+    width: 100%;
+    background: linear-gradient(180deg, var(--bs-primary), color-mix(in srgb, var(--bs-primary) 70%, transparent));
+    border-radius: 4px;
+    min-height: 2px;
+    transition: height 0.3s ease;
+}
+
+.activity-day {
+    flex: 1;
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--bs-secondary-color);
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 575px) {
+    .todo-item { flex-wrap: wrap; }
+    .todo-actions { margin-left: auto; }
+}

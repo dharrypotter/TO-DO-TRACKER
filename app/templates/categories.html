@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Categories — TaskFlow{% endblock %}
+{% block content %}
+<div class="row g-3">
+    <div class="col-lg-5">
+        <div class="card p-4">
+            <h4 class="mb-3"><i class="fa-solid fa-plus"></i> Add category</h4>
+            <form method="POST" action="{{ url_for('categories') }}">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" required maxlength="40"
+                           placeholder="e.g. Fitness">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Color</label>
+                    <input type="color" name="color" class="form-control form-control-color" value="#6c757d">
+                </div>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fa-solid fa-check"></i> Add
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="card p-4">
+            <h4 class="mb-3"><i class="fa-solid fa-tags"></i> Your categories</h4>
+            {% if categories %}
+                <ul class="list-group list-group-flush">
+                    {% for cat in categories %}
+                        <li class="list-group-item d-flex align-items-center justify-content-between bg-transparent">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="cat-chip" style="background: {{ cat.color }}">
+                                    <i class="fa-solid fa-tag"></i> {{ cat.name }}
+                                </span>
+                                <span class="text-secondary small">{{ cat.task_count }} task{{ '' if cat.task_count == 1 else 's' }}</span>
+                            </div>
+                            <form method="POST" action="{{ url_for('delete_category', id=cat.id) }}" class="m-0"
+                                  onsubmit="return confirm('Delete this category? Tasks will become uncategorised.');">
+                                <button class="btn btn-outline-danger btn-sm" title="Delete category">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fa-solid fa-clipboard-list d-block"></i>
+                    <p class="mb-0">No categories yet — add one to start grouping tasks.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

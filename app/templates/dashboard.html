@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — TaskFlow{% endblock %}
+{% block content %}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+    <div>
+        <h1 class="mb-0">Dashboard</h1>
+        <p class="text-secondary small mb-0">A quick look at how you're doing</p>
+    </div>
+    {% if streak > 0 %}
+    <span class="streak-badge">
+        <i class="fa-solid fa-fire"></i> {{ streak }}-day streak
+    </span>
+    {% endif %}
+</div>
+
+<!-- Stats grid -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="tf-stat">
+            <div class="label"><i class="fa-solid fa-list"></i> Total</div>
+            <div class="value">{{ total }}</div>
+            <div class="small text-secondary">{{ active }} active · {{ done }} done</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="tf-stat">
+            <div class="label"><i class="fa-solid fa-check"></i> Today</div>
+            <div class="value">{{ completed_today }}</div>
+            <div class="small text-secondary">tasks completed</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="tf-stat">
+            <div class="label"><i class="fa-solid fa-calendar-week"></i> This week</div>
+            <div class="value">{{ completed_week }}</div>
+            <div class="small text-secondary">last 7 days</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="tf-stat">
+            <div class="label"><i class="fa-solid fa-triangle-exclamation"></i> Overdue</div>
+            <div class="value text-{{ 'danger' if overdue else 'body' }}">{{ overdue }}</div>
+            <div class="small text-secondary">need attention</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Completion progress -->
+    <div class="col-md-5">
+        <div class="card p-4 h-100">
+            <h5 class="mb-3"><i class="fa-solid fa-chart-pie"></i> Completion rate</h5>
+            <div class="text-center my-3">
+                <div style="font-size: 3rem; font-weight: 700;">{{ completion_rate }}%</div>
+                <div class="text-secondary small">{{ done }} of {{ total }} tasks completed</div>
+            </div>
+            <div class="progress" role="progressbar" style="height: 10px;">
+                <div class="progress-bar bg-success"
+                     style="width: {{ completion_rate }}%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 14-day activity bar chart (CSS only, no JS lib) -->
+    <div class="col-md-7">
+        <div class="card p-4 h-100">
+            <h5 class="mb-3"><i class="fa-solid fa-chart-column"></i> Last 14 days</h5>
+            {% set max_count = chart_days|map(attribute='count')|max %}
+            {% set max_count = max_count if max_count and max_count > 0 else 1 %}
+            <div class="d-flex align-items-end gap-1" style="height: 110px;">
+                {% for d in chart_days %}
+                    {% set h = (d.count / max_count * 100)|round(0, 'floor')|int %}
+                    <div class="d-flex flex-column align-items-center" style="flex: 1;">
+                        <div class="activity-bar" title="{{ d.date }}: {{ d.count }}">
+                            <div class="fill" style="height: {{ h }}%;"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="d-flex gap-1 mt-1">
+                {% for d in chart_days %}
+                    <div class="activity-day" style="flex: 1;">{{ d.date.split(' ')[1] }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- By category -->
+    {% if by_category %}
+    <div class="col-12">
+        <div class="card p-4">
+            <h5 class="mb-3"><i class="fa-solid fa-tags"></i> Tasks by category</h5>
+            {% set cat_max = by_category|map(attribute='n')|max %}
+            {% set cat_max = cat_max if cat_max and cat_max > 0 else 1 %}
+            {% for cat in by_category %}
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div style="min-width: 130px;">
+                        <span class="cat-chip" style="background: {{ cat.color }}">
+                            <i class="fa-solid fa-tag"></i> {{ cat.name }}
+                        </span>
+                    </div>
+                    <div class="progress flex-grow-1" style="height: 14px;">
+                        <div class="progress-bar"
+                             style="width: {{ (cat.n / cat_max * 100)|round }}%; background: {{ cat.color }};">
+                        </div>
+                    </div>
+                    <div class="text-secondary small" style="min-width: 30px; text-align: right;">{{ cat.n }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

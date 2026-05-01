@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}New task — TaskFlow{% endblock %}
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width: 600px;">
+    <h2 class="mb-3"><i class="fa-solid fa-plus"></i> New task</h2>
+    <form method="POST" action="{{ url_for('add') }}">
+        <div class="mb-3">
+            <label class="form-label">Title <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="title" required autofocus
+                   placeholder="What needs to get done?">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Description (optional)</label>
+            <textarea class="form-control" name="description" rows="3"
+                      placeholder="Notes, links, sub-steps…"></textarea>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Priority</label>
+                <select class="form-select" name="priority">
+                    <option value="3">High</option>
+                    <option value="2" selected>Medium</option>
+                    <option value="1">Low</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Due date</label>
+                <input type="date" class="form-control" name="due_date">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Category</label>
+                <select class="form-select" name="category_id">
+                    <option value="">— None —</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button class="btn btn-primary" type="submit">
+                <i class="fa-solid fa-check"></i> Create task
+            </button>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
